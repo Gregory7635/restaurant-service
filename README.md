@@ -1,5 +1,7 @@
 # Сервис «Рестораны» (вариант 5), Go kit: HTTP + gRPC
 
+![CI](https://github.com/Gregory7635/restaurant-service/actions/workflows/ci.yml/badge.svg)
+
 ## Запуск
     go mod tidy        # скачает зависимости, создаст go.sum
     go run .
