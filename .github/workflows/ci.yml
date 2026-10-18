@@ -8,8 +8,12 @@ on:
 
 jobs:
   build-and-test:
-    name: Build and Test
+    name: Build and Test (Go ${{ matrix.go-version }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ['1.21', '1.22']
 
     steps:
       - name: Checkout code
@@ -18,7 +22,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: ${{ matrix.go-version }}
           cache: false
 
       - name: Download dependencies
@@ -27,8 +31,14 @@ jobs:
       - name: Verify dependencies
         run: go mod verify
 
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.60
+          args: --timeout=5m
+
       - name: Build
         run: go build -v ./...
 
-      - name: Run tests
-        run: go test -v -race -coverprofile=coverage.out ./...
+      - name: Test
+        run: go test -v -race ./...
