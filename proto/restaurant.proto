@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package restaurant;
+
+option go_package = "example.com/restaurant-service/pb;pb";
+
+service RestaurantService {
+  rpc Create(CreateRequest) returns (CreateResponse);
+  rpc GetByID(GetByIDRequest) returns (GetByIDResponse);
+  rpc ChangeRating(ChangeRatingRequest) returns (ChangeRatingResponse);
+}
+
+message Restaurant {
+  string id = 1;
+  string name = 2;
+  string address = 3;
+  float rating = 4;
+  bool open = 5;
+}
+
+message CreateRequest {
+  Restaurant restaurant = 1;
+}
+
+message CreateResponse {
+  string id = 1;
+}
+
+message GetByIDRequest {
+  string id = 1;
+}
+
+message GetByIDResponse {
+  Restaurant restaurant = 1;
+}
+
+message ChangeRatingRequest {
+  string id = 1;
+  float rating = 2;
+}
+
+message ChangeRatingResponse {}

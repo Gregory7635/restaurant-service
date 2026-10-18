@@ -1,0 +1,13 @@
+# Бинарники
+restaurant-service
+restaurant-service.exe
+server
+*.exe
+
+# Покрытие
+coverage.out
+coverage.html
+
+# IDE
+.idea/
+.vscode/
