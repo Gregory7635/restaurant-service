@@ -37,7 +37,7 @@ func (s *service) Create(ctx context.Context, r restaurant.Restaurant) (string, 
 	r.ID = uuid.New().String()
 
 	if err := s.repository.CreateRestaurant(ctx, r); err != nil {
-		level.Error(logger).Log("err", err)
+		_ = level.Error(logger).Log("err", err)
 		return "", restaurant.ErrCmdRepository
 	}
 	return r.ID, nil
@@ -48,7 +48,7 @@ func (s *service) GetByID(ctx context.Context, id string) (restaurant.Restaurant
 
 	r, err := s.repository.GetRestaurantByID(ctx, id)
 	if err != nil {
-		level.Error(logger).Log("err", err)
+		_ = level.Error(logger).Log("err", err)
 		if errors.Is(err, restaurant.ErrNotFound) {
 			return restaurant.Restaurant{}, restaurant.ErrNotFound
 		}
@@ -64,7 +64,7 @@ func (s *service) ChangeRating(ctx context.Context, id string, rating float32) e
 		return restaurant.ErrInvalidRating
 	}
 	if err := s.repository.ChangeRestaurantRating(ctx, id, rating); err != nil {
-		level.Error(logger).Log("err", err)
+		_ = level.Error(logger).Log("err", err)
 		if errors.Is(err, restaurant.ErrNotFound) {
 			return restaurant.ErrNotFound
 		}

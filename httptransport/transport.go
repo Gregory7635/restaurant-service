@@ -40,7 +40,7 @@ func NewHandler(endpoints transport.Endpoints, logger log.Logger) http.Handler {
 type transportErrorHandler struct{ logger log.Logger }
 
 func (h transportErrorHandler) Handle(_ context.Context, err error) {
-	h.logger.Log("transport_error", err)
+	_ = h.logger.Log("transport_error", err)
 }
 
 func decodeCreateRequest(_ context.Context, r *http.Request) (interface{}, error) {
@@ -78,7 +78,7 @@ func encodeResponse(ctx context.Context, w http.ResponseWriter, response interfa
 func encodeError(_ context.Context, err error, w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(statusFor(err))
-	json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+	_ = json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
 }
 
 func statusFor(err error) int {

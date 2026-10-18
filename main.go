@@ -36,8 +36,8 @@ func main() {
 		logger = level.NewFilter(logger, level.AllowDebug())
 		logger = log.With(logger, "svc", "restaurant", "ts", log.DefaultTimestampUTC, "caller", log.DefaultCaller)
 	}
-	level.Info(logger).Log("msg", "service started")
-	defer level.Info(logger).Log("msg", "service ended")
+	_ = level.Info(logger).Log("msg", "service started")
+	defer func() { _ = level.Info(logger).Log("msg", "service ended") }()
 
 	// Сборка слоёв: репозиторий -> сервис -> эндпоинты -> транспорты
 	repo := repository.NewMemoryRepository()
@@ -65,7 +65,7 @@ func main() {
 	}()
 
 	go func() {
-		level.Info(logger).Log("transport", "HTTP", "addr", *httpAddr)
+		_ = level.Info(logger).Log("transport", "HTTP", "addr", *httpAddr)
 		errs <- httpServer.ListenAndServe()
 	}()
 
@@ -75,11 +75,11 @@ func main() {
 			errs <- err
 			return
 		}
-		level.Info(logger).Log("transport", "gRPC", "addr", *grpcAddr)
+		_ = level.Info(logger).Log("transport", "gRPC", "addr", *grpcAddr)
 		errs <- grpcServer.Serve(lis)
 	}()
 
-	level.Error(logger).Log("exit", <-errs)
+	_ = level.Error(logger).Log("exit", <-errs)
 
 	// Graceful shutdown
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
