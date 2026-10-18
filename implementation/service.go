@@ -22,9 +22,6 @@ func NewService(repo restaurant.Repository, logger log.Logger) restaurant.Servic
 	return &service{repository: repo, logger: logger}
 }
 
-// debugMode - намеренная ошибка для проверки линтера (переменная нигде не используется).
-var debugMode = true
-
 func validRating(r float32) bool { return r >= 0 && r <= 5 }
 
 func (s *service) Create(ctx context.Context, r restaurant.Restaurant) (string, error) {
